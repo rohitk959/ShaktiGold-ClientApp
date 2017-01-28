@@ -1,0 +1,47 @@
+page-item-list {
+
+}
+
+.sg-gallery {
+    ion-col{
+        height: 160px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin: 2px;
+        background-color: #cccccc;
+        
+    }
+
+    .sg-text-center {
+        text-align: center;
+    }
+
+    .itemcontent{
+        width: 70%; 
+        margin: 0px auto;
+    }
+
+    .sg-img-row{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sg-text-row {
+       margin: 0px auto;
+    }
+
+    ion-row{
+        
+        padding-bottom: 1px;
+    }
+
+    img {
+        
+        height: 115px;
+        width: 100px;
+        vertical-align: middle;
+    }
+}
+
+

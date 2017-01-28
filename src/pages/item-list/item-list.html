@@ -1,0 +1,24 @@
+<ion-header>
+
+  <ion-navbar  color="dark">
+    <ion-title>{{subcategory}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="sg-gallery">
+  
+  <ion-row *ngFor="let row of grid">
+    <ion-col *ngFor="let file_uri of row" (click)="getItemDetails(file_uri.itemId)">
+      <div class="itemcontent">
+        <ion-row height="80%" class="sg-img-row">
+          <img [src]="file_uri.imgUrl">
+        </ion-row>
+        <ion-row height="20%">
+          <b class="sg-text-center">{{file_uri.itemProperty[0].name}} - {{file_uri.itemProperty[0].value}} {{file_uri.itemProperty[0].unit}}</b>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

@@ -1,0 +1,31 @@
+
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Cart</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="sg-cart">
+    <ion-list [hidden]="!showCartList">
+      <ion-item *ngFor="let item of message">
+        <ion-thumbnail item-left (click)="getItemDetails(item.itemId)">
+          <img [src]="item.imgUrl"/>
+        </ion-thumbnail>
+        <b (click)="getItemDetails(item.itemId)">Item Code - {{item.itemId}}</b>
+        
+          <ion-icon color="primary" name="trash" (click)="deleteItemFromCart(item.itemId)" item-right></ion-icon>
+          <button ion-button clear item-right icon="trash" (click)="deleteItemFromCart(item.itemId)" item-right>Delete</button>
+      </ion-item>
+    </ion-list>
+
+    <ion-row responsive-sm>
+      <ion-col>
+        <button ion-button (click)="placeOrder()" [hidden]="!showCartList" color="dark" block>Place Order</button>
+      </ion-col>
+    </ion-row>
+
+    <h2 ion-text [hidden]="showCartList">There are no items in your cart.</h2>
+</ion-content>

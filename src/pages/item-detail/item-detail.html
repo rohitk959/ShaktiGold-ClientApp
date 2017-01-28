@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>{{titleName}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="sg-item-detail">
+  <ion-card>
+    <ion-card-header>
+      <b> Item Code : {{message.itemId}} </b>
+    </ion-card-header>
+    <ion-card-content>
+      <img [src]="message.imgUrl"class="sg-item-detail-img"/>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content *ngFor="let prop of itemProperties">
+        <b>{{prop.name}}</b> : {{prop.value}} {{prop.unit}}
+    </ion-card-content>
+  </ion-card>
+
+<div class="sg-button-content" [hidden]="!showButtons">
+  <a ion-button class="cart-button" (click)="getEstimate(message.itemId)">Get Estimate</a>
+  <a ion-button class="cart-button" (click)="addToCart()">Add to Cart</a>
+</div>
+</ion-content>

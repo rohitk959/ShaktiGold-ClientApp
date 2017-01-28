@@ -1,0 +1,25 @@
+page-cart {
+
+}
+
+.sg-cart {
+    ion-list {
+        margin: 5px;
+        background-color: #e5e5e5 !important;
+    }
+
+    .sg-ion-content {
+        background-color: #e5e5e5 !important;
+    }
+
+    .item-md [item-right] {
+    margin: 9px -5px 8px 0;
+    color: darkred;
+    }
+
+    h2{
+        text-align: center;
+        vertical-align: middle;
+        color: #ffffff;
+    }
+}

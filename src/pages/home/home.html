@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+ <ion-content padding class="sg-main-content">
+  <ion-card>
+    <ion-card-content>
+      <ion-slides [options]="mySlideOptions" class="stretch-image">
+        <ion-slide>
+          <img src="http://35.166.116.112:8080/ShaktiGold/resources/img/image-slider/1.jpg" />
+        </ion-slide>
+        <ion-slide>
+          <img src="http://35.166.116.112:8080/ShaktiGold/resources/img/image-slider/2.jpg" />
+        </ion-slide>
+        <ion-slide>
+          <img src="http://35.166.116.112:8080/ShaktiGold/resources/img/image-slider/3.jpg" />
+        </ion-slide>
+      </ion-slides>
+    </ion-card-content>
+  </ion-card>
+
+<ion-list>
+<!-- <ion-item *ngFor="let category of message" (click)="getSubcategory(category.categoryName)">
+    <ion-avatar item-left>
+      <img  [src]="category.imgUrl" >
+    </ion-avatar>
+    <h2>{{category.categoryName}}</h2>
+  
+ </ion-item> -->
+  <ion-card *ngFor="let category of message" (click)="getSubcategory(category.categoryName)" style="display: table;">
+        <img [src]="category.imgUrl" style="width: 65%;height: 65%;padding: 7px;"/>
+        <div class="card-title-icon" style="display: table-cell;vertical-align: middle; font-size: 2.0em;
+          width: 50%; font-weight: bold; color: #000;">{{category.categoryName}}</div>
+  </ion-card>
+</ion-list>
+ </ion-content>
+
+ 
+
+<!-- 
+<ion-content class="card-background-page topmargin"> 
+  <ion-card *ngFor="let category of message" (click)="getSubcategory(category.categoryName)" class='tablecell'>
+        <img [src]="category.imgUrl"/>
+        <div class="card-title">{{category.categoryName}}</div>
+  </ion-card>
+
+
+</ion-content> -->

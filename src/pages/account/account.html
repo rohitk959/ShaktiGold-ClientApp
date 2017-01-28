@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Account</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="sg-account">
+    <ion-list>
+      <ion-item (click)="changePassword()">
+        <ion-icon name="lock"></ion-icon>
+        <span class="sg-account-text">Change Password</span>
+      </ion-item>
+      <ion-item (click)="updateProfile()">
+        <ion-icon name="list-box"></ion-icon>
+        <span class="sg-account-text">Update Profile</span>
+      </ion-item>
+      <ion-item (click)="orders()">
+        <ion-icon name="basket"></ion-icon>
+        <span class="sg-account-text">Your Orders</span>
+      </ion-item>
+    </ion-list>
+</ion-content>

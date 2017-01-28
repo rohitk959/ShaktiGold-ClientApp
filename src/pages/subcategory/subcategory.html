@@ -1,0 +1,14 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Shakti Gold</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="sg-subcategory">
+    <div *ngFor="let subcategory of message" class="subcategory-wrapper">
+      <img [src]="subcategory.imgUrl" (click)="getItem(subcategory.subcategoryName)"/>
+    </div>
+</ion-content>
