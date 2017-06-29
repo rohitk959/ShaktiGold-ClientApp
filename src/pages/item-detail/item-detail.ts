@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Platform } from 'ionic-angular';
 import { ItemService } from '../../providers/item-service';
+import * as globals from '../../app/globals';
 
 @Component({
   selector: 'page-item-detail',
@@ -13,11 +14,11 @@ export class ItemDetailPage {
   sessionId;
   itemId;
   titleName;
-  public itemDetailsData: any = [];
-  public message: any = [];
-  public itemProperties: any = [];
-  addItem: boolean = true;
-  public showButtons: boolean = true;
+  private itemDetailsData: any = [];
+  private message: any = [];
+  private itemProperties: any = [];
+  private estimateData: any = [];
+  private showButtons: boolean = true;
 
   constructor(public navCtrl: NavController, 
       public navParams: NavParams, 
@@ -34,7 +35,7 @@ export class ItemDetailPage {
     this.titleName = this.navParams.get('titleName');
   }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.platform.ready().then(() => {
       this.loadItemDetails();
     });
@@ -50,53 +51,27 @@ export class ItemDetailPage {
       this.message = this.itemDetailsData.message;
       this.itemProperties = this.itemDetailsData.message.itemProperty;
       loader.dismiss();
-    });
+    }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
+      });
   }
 
   addToCart() {
-    if(this.addItem) {
-      let loader = this.loadingCtrl.create({
-        content: "Loading..."
-      });
-      loader.present();
-      this.addItem = false;
-      this.itemSrvc.addToCart(this.email, this.sessionId, this.itemId, "1").then(() => {
-        loader.dismiss();
-        let popup = this.alertCtrl.create({
-          title: 'Info',
-          message: 'This product has been added to cart.',
-          buttons: ['OK']
-        });
-        popup.present();
-      }, reject => {
-        loader.dismiss();
-        let popup = this.alertCtrl.create({
-          title: 'Info',
-          message: 'This product has already been added to cart.',
-          buttons: ['OK']
-        });
-        popup.present();
-      });
-    } else {
-      let popup = this.alertCtrl.create({
-        title: 'Info',
-        message: 'This product has already been added to cart.',
-        buttons: ['OK']
-      });
-      popup.present();
-    }
-  }
-
-  getEstimate(itemId) {
     let loader = this.loadingCtrl.create({
       content: "Loading..."
     });
     loader.present();
-    this.itemSrvc.getEstimate(this.email, this.sessionId, itemId).then(() => {
+    this.itemSrvc.addToCart(this.email, this.sessionId, this.itemId, "1").then(() => {
       loader.dismiss();
       let popup = this.alertCtrl.create({
         title: 'Info',
-        message: 'Your request has been submitted. You will recieve an estimate via SMS shortly.',
+        message: 'This product has been added to cart.',
         buttons: ['OK']
       });
       popup.present();
@@ -104,11 +79,53 @@ export class ItemDetailPage {
       loader.dismiss();
       let popup = this.alertCtrl.create({
         title: 'Info',
-        message: 'Failed to send your request has been submitted. Please contact admin.',
+        message: 'This product has already been added to cart.',
         buttons: ['OK']
       });
       popup.present();
+    }).catch( err => {
+      loader.dismiss();
+      let alert = this.alertCtrl.create({
+          title: globals.MAINTAINANCE_TITLE,
+          subTitle: globals.MAINTAINANCE_MSG,
+          buttons: ['OK']
+        });
+      alert.present();
     });
+  }
+
+  getEstimate(itemId) {
+    let loader = this.loadingCtrl.create({
+      content: "Loading..."
+    });
+    loader.present();
+    this.itemSrvc.getEstimate(this.email, this.sessionId, itemId).then((successData) => {
+      this.estimateData = successData;
+      loader.dismiss();
+      let popup = this.alertCtrl.create({
+        title: 'Info',
+        message: this.estimateData.message,
+        buttons: ['OK']
+      });
+      popup.present();
+    }, (failureData) => {
+      this.estimateData = failureData;
+      loader.dismiss();
+      let popup = this.alertCtrl.create({
+        title: 'Info',
+        message: this.estimateData.message,
+        buttons: ['OK']
+      });
+      popup.present();
+    }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
+      });
   }
 
 }

@@ -1,7 +1,3 @@
-page-subcategory {
-
-}
-
 .sg-subcategory {
     .subcategory-wrapper{
         margin: 4px;
@@ -12,5 +8,24 @@ page-subcategory {
         width: 350px;
     }    
 }
-    
 
+#notification-button {            
+    position: relative;
+    width: 42px;
+    top:1px;
+    right: 1px;
+    overflow: visible!important;
+}
+
+
+#notifications-badge {
+    background-color: red;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    border-radius: 100%;
+}
+
+ion-icon{
+    font-size: 1.5em;
+}

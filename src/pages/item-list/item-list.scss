@@ -1,15 +1,15 @@
-page-item-list {
-
-}
-
-.sg-gallery {
-    ion-col{
+.sg-item-list {
+    .sg-cell{
         height: 160px;
         border: 1px solid grey;
         border-radius: 5px;
         margin: 2px;
-        background-color: #cccccc;
-        
+        background-color: #ffffff;   
+    }
+
+    .sg-cell-text-row{
+        height: 20%;
+        vertical-align: middle;
     }
 
     .sg-text-center {
@@ -25,23 +25,13 @@ page-item-list {
         display: block;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    .sg-text-row {
-       margin: 0px auto;
-    }
-
-    ion-row{
-        
-        padding-bottom: 1px;
+        max-height: 80%;
+        text-align: center;
     }
 
     img {
-        
-        height: 115px;
-        width: 100px;
+        max-height: 115px;
+        max-width: 100px;
         vertical-align: middle;
     }
 }
-
-

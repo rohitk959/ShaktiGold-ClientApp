@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, Platform, LoadingController, AlertController } from 'ionic-angular';
 import { ItemService } from '../../providers/item-service';
 import { ItemDetailPage } from '../item-detail/item-detail';
 import * as globals from "../../app/globals";
@@ -18,27 +18,31 @@ export class ItemListPage {
   limit = globals.limit;
   offset = globals.offset;
   public itemListData: any;
-  images: Array<string>;  
-  grid: Array<Array<string>>;
+  imageGrid: Grid[] = [];
+  hasMoreItems: boolean = false;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
     public itemSrvc: ItemService,
     public platform: Platform,
-    public loadingCtrl: LoadingController) {}
+    public loadingCtrl: LoadingController,
+    private alertCtrl: AlertController) {}
 
   ionViewDidLoad() {
     this.email = this.navParams.get('email');
     this.sessionId = this.navParams.get('sessionId');
     this.category = this.navParams.get('categoryName');
     this.subcategory = this.navParams.get('subcategoryName');
+
+    this.platform.ready().then(() => {
+      if(this.itemListData == null) {
+        this.getItemList();
+      }
+    });
   }
 
   ionViewDidEnter() {
-    this.itemListData = null;
-    this.platform.ready().then(() => {
-      this.getItemList();
-    });
+
   }
 
   getItemList() {
@@ -55,28 +59,26 @@ export class ItemListPage {
                                 this.limit, 
                                 this.offset).then(data => {
                                   this.itemListData = data;
-                                  this.images = this.itemListData.message;
-                                  this.grid = Array(Math.ceil(this.images.length/2));
-                                  this.showImageGrid();
+                                  this.itemListData = this.itemListData.message;
+                                  this.hasMoreItems = this.itemListData.hasMore;
+                                  this.loadImageGrid();
                                   loader.dismiss();
-                              });
+                              }).catch( err => {
+                                  loader.dismiss();
+                                  let alert = this.alertCtrl.create({
+                                      title: globals.MAINTAINANCE_TITLE,
+                                      subTitle: globals.MAINTAINANCE_MSG,
+                                      buttons: ['OK']
+                                    });
+                                  alert.present();
+                                });
   }
 
-  showImageGrid() {
-  let rowNum = 0;
-
-  for (let i = 0; i < this.images.length; i+=2) {
-    this.grid[rowNum] = Array(2);
-    if (this.images[i]) {
-      this.grid[rowNum][0] = this.images[i];
+  loadImageGrid() {
+    for (let i = 0; i < this.itemListData.items.length; i+=2) {
+      this.imageGrid.push(new Grid(this.itemListData.items[i], this.itemListData.items[i+1]));
     }
-
-    if (this.images[i+1]) {
-      this.grid[rowNum][1] = this.images[i+1];
-    }
-    rowNum++;
   }
-}
 
   getItemDetails(itemId) {
     this.navCtrl.push(ItemDetailPage, {
@@ -86,5 +88,21 @@ export class ItemListPage {
       'showButtons': true,
       'titleName': this.subcategory
     });
+  }
+
+  loadMoreItems() {
+    this.offset = this.limit;
+    this.itemListData = null;
+    this.getItemList();
+  }
+}
+
+export class Grid {
+  img1: any;
+  img2: any;
+
+  constructor(_img1: any, _img2: any) {
+    this.img1 = _img1;
+    this.img2 = _img2;
   }
 }

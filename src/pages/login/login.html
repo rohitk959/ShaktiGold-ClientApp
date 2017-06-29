@@ -8,31 +8,29 @@
 	<div>
 	<img src="assets/img/Logo.png"/>
 	</div>
-  <form #loginForm="ngForm" novalidate>
+  <form [formGroup]="loginForm">
 		<ion-list>
-			<ion-item no-lines>
+			<ion-item>
 				<ion-label floating color="dark">Email</ion-label>
-				<ion-input [(ngModel)]="login.username" name="username" type="email" #username="ngModel" spellcheck="false" autocapitalize="off"
-					required>
-				</ion-input>
+				<ion-input type="email" formControlName="email" [(ngModel)]="login.email" required></ion-input>
 			</ion-item>
-			<p [hidden]="username.valid || submitted == false" color="danger" padding-left>
-				Username is required
-			</p>
+			<ion-item [hidden]="submitted == false || loginForm.controls.email.valid">
+				<small color="danger">Email is Invalid</small>
+			</ion-item>
 
 			<ion-item>
 				<ion-label floating color="dark">Password</ion-label>
-				<ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+				<ion-input type="password" formControlName="password" [(ngModel)]="login.password" required>
 				</ion-input>
 			</ion-item>
-			<p [hidden]="password.valid || submitted == false" color="danger" padding-left>
-				Password is required
-			</p>
+			<ion-item [hidden]="submitted == false || loginForm.controls.password.valid">
+				<small color="danger">Password is Invalid</small>
+			</ion-item>
 		</ion-list>
 
 		<ion-row responsive-sm>
 			<ion-col>
-				<button ion-button (click)="onLogin(loginForm)" type="submit" block  color="dark">Login</button>
+				<button ion-button (click)="onLogin()" type="submit" block  color="dark">Login</button>
 			</ion-col>
 			<ion-col>
 				<button ion-button (click)="onSignup()" color="light" block>Signup</button>

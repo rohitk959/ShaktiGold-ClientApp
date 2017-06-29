@@ -12,7 +12,7 @@
     <ion-card-header>
       <b> Item Code : {{message.itemId}} </b>
     </ion-card-header>
-    <ion-card-content>
+    <ion-card-content *ngIf="message.imgUrl != null">
       <img [src]="message.imgUrl"class="sg-item-detail-img"/>
     </ion-card-content>
   </ion-card>

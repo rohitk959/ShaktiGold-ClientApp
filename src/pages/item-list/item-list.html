@@ -6,18 +6,38 @@
 
 </ion-header>
 
-<ion-content class="sg-gallery">
+<ion-content class="sg-item-list">
   
-  <ion-row *ngFor="let row of grid">
-    <ion-col *ngFor="let file_uri of row" (click)="getItemDetails(file_uri.itemId)">
+  <ion-row *ngFor="let grid of imageGrid">
+    <ion-col (click)="getItemDetails(grid.img1.itemId)" class="sg-cell">
       <div class="itemcontent">
-        <ion-row height="80%" class="sg-img-row">
-          <img [src]="file_uri.imgUrl">
+        <ion-row  class="sg-img-row">
+          <img [src]="grid.img1.imgUrl">
         </ion-row>
-        <ion-row height="20%">
-          <b class="sg-text-center">{{file_uri.itemProperty[0].name}} - {{file_uri.itemProperty[0].value}} {{file_uri.itemProperty[0].unit}}</b>
+        <ion-row class="sg-cell-text-row">
+          <b class="sg-text-center">{{grid.img1.itemProperty[0].name}} - {{grid.img1.itemProperty[0].value}} {{grid.img1.itemProperty[0].unit}}</b>
         </ion-row>
       </div>
+    </ion-col>
+
+    <ion-col *ngIf="!(grid.img2)">
+    </ion-col>
+
+    <ion-col (click)="getItemDetails(grid.img2.itemId)" class="sg-cell" *ngIf="grid.img2">
+      <div class="itemcontent">
+        <ion-row class="sg-img-row">
+          <img [src]="grid.img2.imgUrl">
+        </ion-row>
+        <ion-row class="sg-cell-text-row">
+          <b class="sg-text-center">{{grid.img2.itemProperty[0].name}} - {{grid.img2.itemProperty[0].value}} {{grid.img2.itemProperty[0].unit}}</b>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <button ion-button block color="dark" (click)="loadMoreItems()" [hidden]="!hasMoreItems">Load More Items</button>
     </ion-col>
   </ion-row>
 

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, Platform, AlertController, LoadingController,ModalController } from 'ionic-angular';
+import { NavController, NavParams, Platform, AlertController, LoadingController, PopoverController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { ItemService } from '../../providers/item-service';
-import { ItemDetailsCartPage } from '../item-details-cart/item-details-cart';
 import { ItemDetailPage } from '../item-detail/item-detail';
-import { SubcategoryPage } from '../subcategory/subcategory';
+import { PopoverContent } from '../popover-content/popover-content';
+import * as globals from '../../app/globals';
 
 @Component({
   selector: 'page-cart',
@@ -19,25 +20,32 @@ export class CartPage {
   public orderData: any;
   public showCartList: boolean = true;
 
-  constructor(public navCtrl: NavController, 
-      public navParams: NavParams, 
-      public itemSrvc: ItemService,
-      public viewCtrl: ViewController,
-      public platform: Platform,
-      public alertCtrl: AlertController,
-      public loadingCtrl: LoadingController,
-      public modalCtrl: ModalController) {}
+  constructor(private navCtrl: NavController, 
+      private navParams: NavParams, 
+      private itemSrvc: ItemService,
+      private platform: Platform,
+      private alertCtrl: AlertController,
+      private loadingCtrl: LoadingController,
+      private storage: Storage,
+      private popoverCtrl: PopoverController ) { }
 
-  ionViewDidLoad() {
-    this.email = this.navParams.get('email');
-    this.sessionId = this.navParams.get('sessionId');
-  }
+  ionViewDidLoad() { }
 
   ionViewDidEnter() {
     this.cartData = null;
     this.message = [];
     this.platform.ready().then(() => {
-      this.loadCart();
+      if(this.email == null || this.sessionId == null){
+        this.storage.get('logged_user').then( (loggedUser) => {
+          this.email = loggedUser;
+          this.storage.get('session_id').then( (sessionId) => {
+            this.sessionId = sessionId;
+            this.loadCart();
+          });
+        });
+      } else {
+        this.loadCart();
+      }
     });
   }
 
@@ -56,7 +64,15 @@ export class CartPage {
       this.message = [];
       this.showCartList = false;
       loader.dismiss();
-    });
+    }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
+      });
   }
 
   getItemDetails(itemId) {
@@ -70,13 +86,13 @@ export class CartPage {
   }
 
   deleteItemFromCart(itemId) {
-    let loader1 = this.loadingCtrl.create({
+    let loader = this.loadingCtrl.create({
       content: "Loading..."
     });
-    loader1.present();
+    loader.present();
     this.itemSrvc.deleteItemFromCart(this.email, this.sessionId, itemId).then(successData => {
       this.loadCart();
-      loader1.dismiss();
+      loader.dismiss();
       let popup = this.alertCtrl.create({
           title: 'Info',
           message: 'Product has been removed from cart.',
@@ -84,14 +100,22 @@ export class CartPage {
         });
         popup.present();
     },failureData => {
-      loader1.dismiss();
+      loader.dismiss();
       let popup = this.alertCtrl.create({
           title: 'Info',
           message: 'Failed to remove product from cart.',
           buttons: ['OK']
         });
         popup.present();
-    });
+    }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
+      });
   }
 
   placeOrder() {
@@ -102,7 +126,6 @@ export class CartPage {
     this.itemSrvc.placeOrder(this.email, this.sessionId).then( successData => {
       this.orderData = successData;
       loader.dismiss();
-      console.log(this.orderData);
       if(this.orderData.result == "SUCCESS") {
         let alert = this.alertCtrl.create({
           title: "Your order has been confirmed.",
@@ -127,6 +150,21 @@ export class CartPage {
       }
     }, failureData => {
       loader.dismiss(); 
+    }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
+      });
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(PopoverContent);
+    popover.present({
+      ev: myEvent
     });
   }
 }

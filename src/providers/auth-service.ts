@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/timeout';
 import * as globals from "./../app/globals";
 
 @Injectable()
@@ -11,6 +12,7 @@ export class AuthService {
   getUserProfileData: any;
   updateProfileData: any;
   changePasswordData: any;
+  notificationCountData: any;
 
   host: string = globals.host;
   loginURL: string = this.host.concat( '/ShaktiGold/login.htm' );
@@ -18,6 +20,7 @@ export class AuthService {
   getUserProfileURL: string = this.host.concat( '/ShaktiGold/getUserProfile.htm' );
   updateProfileURL: string = this.host.concat( '/ShaktiGold/updateProfile.htm' );
   changePasswordURL: string = this.host.concat( '/ShaktiGold/changePassword.htm' );
+  notificationCountURL: string = this.host.concat( '/ShaktiGold/getNotificationCount.htm');
 
   constructor(public http: Http) {}
 
@@ -32,14 +35,15 @@ export class AuthService {
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.loginURL, body, options)
+      .timeout(globals.http_timeout)
       .map(res => res.json())
       .subscribe(data => {
         this.loginData = data;
         resolve(this.loginData);
       }, err => {
-        console.log('Login Failed' + err);
+        reject('LOGIN_FAILED_TIMEOUT');
       });
     });
   }
@@ -59,14 +63,14 @@ export class AuthService {
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.registerUserURL, body, options)
       .map(res => res.json())
       .subscribe(data => {
         this.registerUserData = data;
         resolve(this.registerUserData);
       }, err => {
-        console.log('SignUp Failed' + err);
+        reject('REGISTRATION_FAILED_TIMEOUT');
       });
     });
   }
@@ -82,14 +86,15 @@ export class AuthService {
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.getUserProfileURL, body, options)
+      .timeout(globals.http_timeout)
       .map(res => res.json())
       .subscribe(data => {
         this.getUserProfileData = data;
         resolve(this.getUserProfileData);
       }, err => {
-        console.log('SignUp Failed' + err);
+        reject('GET_USER_PROFILE_FAILED_TIMEOUT');
       });
     });
   }
@@ -110,21 +115,19 @@ export class AuthService {
       }
     });
 
-    console.log(body);
-
     let headers = new Headers({ 'Content-Type': 'application/json' });
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.updateProfileURL, body, options)
+      .timeout(globals.http_timeout)
       .map(res => res.json())
       .subscribe(data => {
         this.updateProfileData = data;
-        console.log(this.updateProfileData);
         resolve(this.updateProfileData);
       }, err => {
-        console.log('Profile update Failed' + err);
+        reject('REGISTRATION_FAILED_TIMEOUT');
       });
     });
   }
@@ -138,20 +141,39 @@ export class AuthService {
       'newPassword': newPassword
     });
 
-    console.log(body);
-
     let headers = new Headers({ 'Content-Type': 'application/json' });
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.changePasswordURL, body, options)
+      .timeout(globals.http_timeout)
       .map(res => res.json())
       .subscribe(data => {
         this.changePasswordData = data;
         resolve(this.changePasswordData);
       }, err => {
-        console.log('SignUp Failed' + err);
+        reject("CHANGE_PASSWORD_FAILED_TIMEOUT");
+      });
+    });
+  }
+
+  getNotificationCount(email: string, sessionId: string) {
+    let url = this.notificationCountURL + '?email=' + email + '&sessionId=' + sessionId;
+
+    return new Promise( (resolve, reject) => {
+      this.http.get(url)
+      .timeout(globals.http_timeout)
+      .map(res => res.json())
+      .subscribe(data => {
+        this.notificationCountData = data;
+        if(this.notificationCountData.result == "SUCCESS") {
+          resolve(this.notificationCountData);
+        } else {
+          reject(this.notificationCountData);
+        }
+      }, err => {
+        reject("GET_NOTIFICATION_COUNT_FAILED_TIMEOUT");
       });
     });
   }

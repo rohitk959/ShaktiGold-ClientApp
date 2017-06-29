@@ -1,7 +1,19 @@
 <ion-header>
 
   <ion-navbar color="dark">
+
     <ion-title>Shakti Gold</ion-title>
+
+    <ion-buttons end>
+      <button id="notification-button" ion-button clear (click)="displayNotifications()">
+        <ion-icon name="notifications">
+          <ion-badge id="notifications-badge" color="danger" *ngIf="notificationCount != 0">{{notificationCount}}</ion-badge>
+        </ion-icon>            
+      </button>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

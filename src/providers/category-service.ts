@@ -43,7 +43,7 @@ export class CategoryService {
         }
         
       }, err => {
-        console.log('Failed to fetch categories' + err);
+        reject("LOAD_CATEGORY_FAILED_TIMEOUT");
       });
     });
   }
@@ -78,7 +78,7 @@ export class CategoryService {
         }
 
       }, err => {
-        console.log('Failed to fetch subcategories' + err);
+        reject("LOAD_SUBCATEGORY_FAILED_TIMEOUT");
       });
     });
   }

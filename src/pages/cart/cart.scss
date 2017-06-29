@@ -1,7 +1,3 @@
-page-cart {
-
-}
-
 .sg-cart {
     ion-list {
         margin: 5px;
@@ -22,4 +18,24 @@ page-cart {
         vertical-align: middle;
         color: #ffffff;
     }
+}
+
+#notification-button {            
+    position: relative;
+    width: 42px;
+    top:1px;
+    right: 1px;
+    overflow: visible!important;
+}
+
+#notifications-badge {
+    background-color: red;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    border-radius: 100%;
+}
+
+ion-icon{
+    font-size: 2.5em;
 }

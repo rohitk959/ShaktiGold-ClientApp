@@ -6,55 +6,50 @@
 
 <ion-content class="sg-register">
 	<div>
-	<img src="assets/img/Logo.png"/>
+		<img src="assets/img/Logo.png"/>
 	</div>
-  <form #signUpForm="ngForm" novalidate>
+	<form [formGroup]="registrationForm">
 		<ion-list no-lines>
 			<ion-item>
 				<ion-label floating color="dark">First Name</ion-label>
-				<ion-input [(ngModel)]="profile.firstName" name="firstName" type="text" #firstName="ngModel" spellcheck="false" autocapitalize="off"
-					required>
-				</ion-input>
+				<ion-input type="text" formControlName="firstName" [(ngModel)]="profile.firstName" required></ion-input>
 			</ion-item>
-			<p [hidden]="firstName.valid || submitted == false" color="danger" padding-left>
-				First Name is required
-			</p>
+			<ion-item [hidden]="submitted == false || registrationForm.controls.firstName.valid">
+				<small color="danger">First Name is Invalid</small>
+			</ion-item>
 
 			<ion-item>
 				<ion-label floating color="dark">Last Name</ion-label>
-				<ion-input [(ngModel)]="profile.lastName" name="lastName" type="text" #lastName="ngModel" required>
-				</ion-input>
+				<ion-input type="text" formControlName="lastName" [(ngModel)]="profile.lastName" required></ion-input>
 			</ion-item>
-			<p [hidden]="lastName.valid || submitted == false" color="danger" padding-left>
-				Last Name is required
-			</p>
+			<ion-item [hidden]="submitted == false || registrationForm.controls.lastName.valid">
+				<small color="danger">Last Name is Invalid</small>
+			</ion-item>
 
 			<ion-item>
 				<ion-label floating color="dark">Mobile</ion-label>
-				<ion-input [(ngModel)]="profile.mobile" name="mobile" type="number" #mobile="ngModel" required>
-				</ion-input>
+				<ion-input type="tel" formControlName="mobile" [(ngModel)]="profile.mobile" required></ion-input>
 			</ion-item>
-			<p [hidden]="mobile.valid || submitted == false" color="danger" padding-left>
-				Mobile is required
-			</p>
+			<ion-item [hidden]="submitted == false || registrationForm.controls.mobile.valid">
+				<small color="danger">Mobile is Invalid</small>
+			</ion-item>
 
 			<ion-item>
 				<ion-label floating color="dark">Email</ion-label>
-				<ion-input [(ngModel)]="profile.email" name="email" type="text" #email="ngModel" required>
-				</ion-input>
+				<ion-input type="email" formControlName="email" [(ngModel)]="profile.email" required></ion-input>
 			</ion-item>
-			<p [hidden]="email.valid || submitted == false" color="danger" padding-left>
-				Last Name is required
-			</p>
+			<ion-item [hidden]="submitted == false || registrationForm.controls.email.valid">
+				<small color="danger">Email is Invalid</small>
+			</ion-item>
 
 			<ion-item>
 				<ion-label floating color="dark">Password</ion-label>
-				<ion-input [(ngModel)]="profile.password" name="password" type="password" #password="ngModel" required>
+				<ion-input type="password" formControlName="password" [(ngModel)]="profile.password" required>
 				</ion-input>
 			</ion-item>
-			<p [hidden]="password.valid || submitted == false" color="danger" padding-left>
-				Last Name is required
-			</p>
+			<ion-item [hidden]="submitted == false || registrationForm.controls.password.valid">
+				<small color="danger">Password is Invalid</small>
+			</ion-item>
 		</ion-list>
 
 		<ion-row responsive-sm>

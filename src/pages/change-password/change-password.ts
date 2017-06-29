@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth-service';
+import * as globals from '../../app/globals';
 
 @Component({
   selector: 'page-change-password',
@@ -22,7 +23,8 @@ export class ChangePasswordPage  {
       private formBuilder: FormBuilder, 
       private authSrvc: AuthService,
       private alertCtrl: AlertController,
-      private toastCtrl: ToastController) {
+      private toastCtrl: ToastController,
+      private loadingCtrl: LoadingController) {
     this.email = this.navParams.get('email');
     this.sessionId = this.navParams.get('sessionId');
     this.buildForm();
@@ -48,11 +50,15 @@ export class ChangePasswordPage  {
 
   changePassword() {
     if(this.changePasswordForm.valid && this.changePasswordForm.value.password === this.changePasswordForm.value.confirmPassword){
+      let loader = this.loadingCtrl.create({
+        content: 'Loading...'
+      });
+      loader.present();
       this.authSrvc.changePassword(this.email, this.sessionId, 
           this.changePasswordForm.value.oldPassword, 
           this.changePasswordForm.value.password).then( successData => {
+            loader.dismiss();
             this.changePasswordData = successData;
-            console.log(this.changePasswordData);
             if(this.changePasswordData.result == "SUCCESS") {
               let alert = this.alertCtrl.create({
                 title: "Password updated successfully.",
@@ -66,12 +72,21 @@ export class ChangePasswordPage  {
               });
               alert.present();
             } 
+          }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
           });
+        alert.present();
+      });
     } else {
       let toast = this.toastCtrl.create({
         message: "Please correct the form errors",
         duration: 3000
       });
+      toast.present();
     }
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth-service';
+import * as globals from '../../app/globals';
 
 @Component({
   selector: 'page-update-profile',
@@ -83,6 +84,15 @@ export class UpdateProfilePage {
           title: 'Your Profile has been updated.',
           buttons: ["OK"]
         });
+        alert.present();
+      }).catch( err => {
+        loader.dismiss();
+        let alert = this.alertCtrl.create({
+            title: globals.MAINTAINANCE_TITLE,
+            subTitle: globals.MAINTAINANCE_MSG,
+            buttons: ['OK']
+          });
+        alert.present();
       });
     }
   }

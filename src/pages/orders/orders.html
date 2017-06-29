@@ -1,22 +1,30 @@
 <ion-header>
 
   <ion-navbar color="dark">
-    <ion-title>Orders</ion-title>
+    <ion-title>My Orders</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content class="sg-class">
+<ion-content class="sg-orders">
   <ion-list [hidden]="!showOrdersList">
       <ion-item *ngFor="let item of message" (click)="getItemDetails(item.itemId)">
         <ion-thumbnail item-left>
           <img [src]="item.imgUrl"/>
         </ion-thumbnail>
-        <b>Item Code - {{item.itemId}}</b><br>
-        <b>Order Status - {{item.orderStatus}}</b>
+        <div class="sg-orders-text">
+          <b>Item Code -</b> {{item.itemId}}<br>
+          <b>Order Date -</b> {{item.orderDate}}<br>
+          <b>Order Complete Date -</b> {{item.orderCompleteDate}}<br>
+          <b>Order Status -</b>
+          <span *ngIf="item.orderStatus == 'NEW'" class="sg-orders-text-green">{{item.orderStatus}}</span>
+          <span *ngIf="item.orderStatus == 'PROCESSING'" class="sg-orders-text-orange">{{item.orderStatus}}</span>
+          <span *ngIf="item.orderStatus == 'DELIVERED'" class="sg-orders-text-blue">{{item.orderStatus}}</span>
+          <span *ngIf="item.orderStatus == 'CANCELLED'" class="sg-orders-text-red">{{item.orderStatus}}</span>
+        </div>
       </ion-item>
     </ion-list>
 
-    <h2 ion-text [hidden]="showOrdersList">You have not placed any order.</h2>
+    <h2 class="sg-h2-txt" ion-text [hidden]="showOrdersList">You have not placed any order.</h2>
 </ion-content>

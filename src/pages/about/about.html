@@ -3,6 +3,16 @@
     <ion-title>
       Shakti Gold
     </ion-title>
+    <ion-buttons end>
+      <button id="notification-button" ion-button clear>
+        <ion-icon name="notifications">
+          <ion-badge id="notifications-badge" color="danger">5</ion-badge>
+        </ion-icon>            
+      </button>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -12,9 +22,9 @@
   <div text-center class="sg-light-text">
     <h1 ion-text >Shakti Gold</h1>
     <h4 ion-text>
-      An innovative and Online marketing of Jwellery, Silver Ornaments, Diamonds and many more. This is
-      the first online Jwellery. We have numerous mind blowing Jwellery designs. We take bulk Orders too.
+      An innovative and Online marketing of Gold Jwellery Ornaments, Diamonds and many more. This is
+      the first online Jwellery in Belgaum. We have numerous mind blowing Jwellery designs. We take bulk Orders too.
     </h4>
-    <h6 ion-text>Ph: 1234567890</h6>
+    <h6 ion-text>Ph: 8867422004</h6>
   </div>
 </ion-content>

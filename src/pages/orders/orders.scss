@@ -1,3 +1,26 @@
-page-orders {
+.sg-orders{
+    .sg-orders-text{
+        font-size: 0.9em;
 
+        .sg-orders-text-green{
+            color: lawngreen;
+        }
+
+        .sg-orders-text-orange{
+            color: orange;
+        }
+
+        .sg-orders-text-blue{
+            color: blue;
+        }
+
+        .sg-orders-text-red{
+            color: red;
+        }
+    }
+
+    .sg-h2-txt{
+        color: white;
+        text-align: center;
+    }
 }

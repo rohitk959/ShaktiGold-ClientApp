@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-
-import { NavController } from 'ionic-angular';
+import { NavController, PopoverController } from 'ionic-angular';
+import { PopoverContent } from '../popover-content/popover-content';
 
 @Component({
   selector: 'page-about',
@@ -8,8 +8,13 @@ import { NavController } from 'ionic-angular';
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(private navCtrl: NavController,
+      private popoverCtrl: PopoverController) { }
 
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(PopoverContent);
+    popover.present({
+      ev: myEvent
+    });
   }
-
 }

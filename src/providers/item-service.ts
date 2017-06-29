@@ -16,11 +16,11 @@ export class ItemService {
   
   host: string = globals.host;
   getAllItemsURL: string = this.host.concat( '/ShaktiGold/getAllItem.htm' );
-  getItemDetails: string = this.host.concat( '/ShaktiGold/getItemDetails.htm' );
+  getItemDetailsURL: string = this.host.concat( '/ShaktiGold/getItemDetails.htm' );
   putItemToCartURL: string = this.host.concat( '/ShaktiGold/putItemToCart.htm' );
   getCartItemsURL: string = this.host.concat( '/ShaktiGold/getItemsFromCart.htm' );
   deleteItemFromCartURL: string = this.host.concat( '/ShaktiGold/deleteItemFromCart.htm' );
-  getEstimateURL: string = this.host.concat( '/ShaktiGold/getEstimate.htm' );
+  getEstimateURL: string = this.host.concat( '/ShaktiGold/getEstimateDB.htm' );
   getAllUserOrderURL: string = this.host.concat( '/ShaktiGold/getAllUserOrder.htm' );
   placeOrderURL: string = this.host.concat( '/ShaktiGold/placeOrder.htm' );
 
@@ -32,10 +32,6 @@ export class ItemService {
                 subcategoryName: string,
                 limit: string,
                 offset: string) {
-
-    if(this.itemListData) {
-      return Promise.resolve(this.itemListData);
-    }
 
     let body = JSON.stringify({
       'email': email,
@@ -50,14 +46,14 @@ export class ItemService {
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
+    return new Promise( (resolve,reject) => {
       this.http.post(this.getAllItemsURL, body, options)
       .map(res => res.json())
       .subscribe(data => {
         this.itemListData = data;
         resolve(this.itemListData);
       }, err => {
-        console.log('Failed to load items list' + err);
+        reject("LOAD_ITEM_LIST_FAILED_TIMEOUT");
       });
     });
   }
@@ -76,14 +72,14 @@ export class ItemService {
 
     let options = new RequestOptions({ headers: headers });
 
-    return new Promise( resolve => {
-      this.http.post(this.getItemDetails, body, options)
+    return new Promise( (resolve,reject) => {
+      this.http.post(this.getItemDetailsURL, body, options)
       .map(res => res.json())
       .subscribe(data => {
         this.itemDetailsData = data;
         resolve(this.itemDetailsData);
       }, err => {
-        console.log('Failed to load item details' + err);
+        reject("LOAD_ITEM_DETAILS_FAILED_TIMEOUT");
       });
     });
   }
@@ -114,7 +110,7 @@ export class ItemService {
           reject(this.itemDetailsData);
         }
       }, err => {
-        console.log('Failed to add item to cart' + err);
+        reject("ADD_TO_CART_FAILED_TIMEOUT");
       });
     });
   }
@@ -143,7 +139,7 @@ export class ItemService {
         }
         
       }, err => {
-        console.log('Failed to fetch items from cart' + err);
+        reject("GET_CART_FAILED_TIMEOUT");
       });
     });
   }
@@ -172,7 +168,7 @@ export class ItemService {
           reject(this.deleteItemFromCartData);
         }
       }, err => {
-        console.log('Failed to delete item from cart' + err);
+        reject("DELETE_ITEM_FROM_CART_FAILED_TIMEOUT");
       });
     });
   }
@@ -201,7 +197,7 @@ export class ItemService {
           reject(this.getEstimateData);
         }
       }, err => {
-        console.log('Failed to delete item from cart' + err);
+        reject("GET_ESTIMATE_FAILED_TIMEOUT");
       });
     });
   }
@@ -228,7 +224,7 @@ export class ItemService {
           reject(this.getEstimateData);
         }
       }, err => {
-        console.log('Failed to delete item from cart' + err);
+        reject("LOAD_ORDERS_FAILED_TIMEOUT");
       });
     });
   }
@@ -255,7 +251,7 @@ export class ItemService {
           reject(this.placeOrderData);
         }
       }, err => {
-        console.log('Failed to delete item from cart' + err);
+        reject("PLACE_ORDER_FAILED_TIMEOUT");
       });
     });
   }
